@@ -1,7 +1,9 @@
 var mainApp ={};
+var database;
+var canvas;
+var complist = document.getElementById('complist');
 
 (function() {
-
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             // User is signed in.
@@ -20,6 +22,52 @@ var mainApp ={};
             console.log("User sign out error!");
         })
     }
-
     mainApp.logOut = logOut;
+
+    database =firebase.database();   
+    var ref = database.ref('Competitions');
+    console.log("Access the database!");
+    ref.on("value",gotData, errData);
+
+    function gotData(data){
+        // console.log(data.val());
+        var competitions = data.val();
+        var keys = Object.keys(competitions);
+        // console.log(keys);
+        for (var i=0;i<keys.length;i++){
+            var k = keys[i];
+            var compName=competitions[k].cname;
+            var compDate=competitions[k].date;
+            console.log(compName,compDate);
+            var li = document.createElement('li');
+            li.textContent=compDate+'-'+compName;
+            // add id to li tag
+            li.id=k;
+            console.log(li);
+            // add a button
+            var btn = document.createElement('button');
+            btn.textContent=k;
+            btn.addEventListener('click',function(){
+                alert("hello wrold");
+            },false)
+
+
+            // add a reference
+            li.innerHTML="<a href='Competition.html'>"+compDate+'-'+compName+"</a>";               
+            li.appendChild(btn);       
+            document.getElementById('complist').appendChild(li);
+            
+        }
+    }
+    
+    function errData(err){
+        console.log('Error!');
+        console.log(err);
+    }
+    
+    function showDetail(){
+        console.log(this.html());
+    }
+
 })()
+

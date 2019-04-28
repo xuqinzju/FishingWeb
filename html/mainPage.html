@@ -3,18 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Fishing Competition</title>
-    <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+    
     <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="../js/npm.js"></script> 
+    <script src="../js/p5.min.js"></script>
+    <script src="../js/p5.dom.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
     <script src="../js/fireBase.js"></script>
+    <script src="../js/mainPage.js"></script>
+    <!-- <meta http-equiv="refresh" content="5"> -->
+    <link rel="icon" type="image/icon" href="../image/fishing-icon.ico">
 </head>
 <body>
-
+    <style>
+        body{
+            padding-top:50px;
+        }
+        .starter{
+            padding:40px 15px;
+            text-align: center;
+        }
+    </style>
+    <!-- Navigation bar -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
                 <a href="#" class="navbar-brand">Fishing Competition</a>
             </div>
-
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="#" > </a></li>
@@ -24,8 +39,12 @@
         </div>
     </nav>
 
-<script src="../js/fireBase.js"></script>
-<script src="../js/mainPage.js"></script>
-
+    <div class="container">
+        <div class="starter">
+            <p>
+                <ol id = 'complist'></ol>
+            </p>
+        </div>
+    </div>    
 </body>
 </html>
