@@ -1,6 +1,5 @@
 var mainApp ={};
 var database;
-var canvas;
 var complist = document.getElementById('complist');
 
 (function() {
@@ -40,7 +39,6 @@ var complist = document.getElementById('complist');
             var compDate=competitions[k].date;
             console.log(compName,compDate);
             var li = document.createElement('li');
-            li.textContent=compDate+'-'+compName;
             // add id to li tag
             li.id=k;
             console.log(li);
@@ -51,10 +49,15 @@ var complist = document.getElementById('complist');
                 alert("hello wrold");
             },false)
 
-
+            var address = 'Competition.html?'+'id='+k+"&content=detail";
             // add a reference
-            li.innerHTML="<a href='Competition.html'>"+compDate+'-'+compName+"</a>";               
-            li.appendChild(btn);       
+            // li.innerHTML="<a href='Competition.html' target='_blank'>"
+            //                         +compDate+'-'+compName+"</a>";          
+            var link = document.createElement('a');
+            link.href = address;
+            link.innerHTML=compDate+'-'+compName;
+            li.appendChild(link);      
+            // li.appendChild(btn);       
             document.getElementById('complist').appendChild(li);
             
         }

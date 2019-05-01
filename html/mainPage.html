@@ -11,6 +11,7 @@
     <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
     <script src="../js/fireBase.js"></script>
     <script src="../js/mainPage.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- <meta http-equiv="refresh" content="5"> -->
     <link rel="icon" type="image/icon" href="../image/fishing-icon.ico">
 </head>
@@ -19,9 +20,13 @@
         body{
             padding-top:50px;
         }
-        .starter{
+        .title{
             padding:40px 15px;
             text-align: center;
+        }
+        .complist{
+            text-align:center;
+
         }
     </style>
     <!-- Navigation bar -->
@@ -40,11 +45,16 @@
     </nav>
 
     <div class="container">
-        <div class="starter">
+            <div class="title">
+                    <h1>Competition List</h1>
+            </div>
+
+        <div class="complist">  
             <p>
                 <ol id = 'complist'></ol>
             </p>
         </div>
+       
     </div>    
 </body>
 </html>
