@@ -33,10 +33,7 @@ var today = new Date();
 
     key=getQueryString("id");
     content=getQueryString("content");
-   
-
-    //light.className="active";
-    // alert(key);
+    
     function gotData(data){
         // console.log(data.val());
         var address = 'Competition.html?'+'id='+key;
@@ -55,6 +52,7 @@ var today = new Date();
         var title = document.getElementById('title');
         var head = document.createElement('h1');
         var ul = document.getElementById('content');
+        
         title.appendChild(head);
         switch(content){
             case 'detail':
@@ -105,23 +103,21 @@ var today = new Date();
 
             case 'attendance':
             //TODO:turn to ol list
-            head.innerHTML="Competition Attendance";           
-            for(var i=0; i<attendants.length;i++){
-                var uid=attendants[i];
+            head.innerHTML="Competition Attendance"; 
                 var refUser = firebase.database().ref("Users");
                 console.log("Access the user database");
                 refUser.once("value").then(function(snapshot) {
-                
-                console.log(uid);
-                var name = snapshot.child(uid).child('displayName').val(); 
-                console.log(name);
+                    for(var i=0; i<attendants.length;i++){
+                        var uid=attendants[i];
+                        console.log(uid);
+                        var name = snapshot.child(uid).child('displayName').val(); 
+                        console.log(name);
 
-                var li=document.createElement('li');
-                li.className="list-group-item"
-                li.innerHTML=name;
-                ul.appendChild(li);
-            })
-        }
+                        var li=document.createElement('li');
+                        li.className="list-group-item"
+                        li.innerHTML=(i+1)+'. '+ name;
+                        ul.appendChild(li);
+                     }})    
             break;
 
             case 'post':
@@ -136,16 +132,7 @@ var today = new Date();
             // for(var i=0; i<attendants.length;i++){
             //     console.log(compStorage.child(attendants[i]).child(''));
             // }
-        
 
-
-            break;
-
-            case 'map':
-            //TODO: add if-else function
-            //map would only be shown in -ing competition
-            head.innerHTML="Competition Map"; 
-            
             break;
         }
         
@@ -155,7 +142,7 @@ var today = new Date();
         var attBtn=document.getElementById('attendance');
         var postBtn=document.getElementById('post');
         var mapBtn=document.getElementById('map');
-
+    
         detailBtn.onclick=function(){
             //console.log('detail');
             //this.className
@@ -175,10 +162,8 @@ var today = new Date();
 
         mapBtn.onclick=function(){
             //console.log('map');
-            window.location.replace(address+="&content=map")
-        }
-        
-        
+            window.location.assign('Map.html?id='+key);
+        }       
     }
     
     function errData(err){

@@ -49,15 +49,12 @@ var complist = document.getElementById('complist');
                 alert("hello wrold");
             },false)
 
-            var address = 'Competition.html?'+'id='+k+"&content=detail";
-            // add a reference
-            // li.innerHTML="<a href='Competition.html' target='_blank'>"
-            //                         +compDate+'-'+compName+"</a>";          
+            var address = 'Competition.html?'+'id='+k+"&content=detail";         
             var link = document.createElement('a');
             link.href = address;
+            link.target="_blank";
             link.innerHTML=compDate+'-'+compName;
-            li.appendChild(link);      
-            // li.appendChild(btn);       
+            li.appendChild(link);            
             document.getElementById('complist').appendChild(li);
             
         }
@@ -68,9 +65,6 @@ var complist = document.getElementById('complist');
         console.log(err);
     }
     
-    function showDetail(){
-        console.log(this.html());
-    }
 
 })()
 
