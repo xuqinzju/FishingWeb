@@ -52,8 +52,9 @@ var today = new Date();
         var title = document.getElementById('title');
         var head = document.createElement('h1');
         var ul = document.getElementById('content');
-
         title.appendChild(head);
+        //TODO: make current content tab "active"
+        
         switch (content) {
             case 'detail':
                 //TODO: add an if-else function for upcoming competition
@@ -178,6 +179,7 @@ var today = new Date();
         return null;
     }
 
+    //TODO: function, judge whether it's a upcoming competition
     function upcomingComp(date1, date2) {
         return false
     }
