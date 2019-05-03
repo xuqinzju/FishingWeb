@@ -102,7 +102,6 @@ var today = new Date();
                 break;
 
             case 'attendance':
-                //TODO:turn to ol list
                 head.innerHTML = "Competition Attendance";
                 var refUser = firebase.database().ref("Users");
                 console.log("Access the user database");
