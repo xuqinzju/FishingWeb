@@ -1,102 +1,107 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>Competition Map</title>
     <meta name="viewport" content="initial-scale=1.0">
     <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
     <script src="../js/fireBase.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACSvwEYu8nhcsb3tubvu8NOObIbBQ4gB8"></script>
     <meta charset="utf-8">
-    <link rel="icon" type="image/png" href="../image/map.png"> 
+    <link rel="icon" type="image/png" href="../image/map.png">
     <style>
-      
-      #map {
-        height: 100%;
-      }
-      
-      html, body {
-        height: 100%;
-        /* height:80%; */
-        margin: 0;
-        padding: 0;
-      }
+        #map {
+            height: 100%;
+        }
+
+        html,
+        body {
+            height: 100%;
+            /* height:80%; */
+            margin: 0;
+            padding: 0;
+        }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <div id="map"></div>
     <script>
-        
-
-        var database =firebase.database();   
+        var database = firebase.database();
         var ref = database.ref('Competitions');
         console.log("Access the database!");
-        ref.on("value",gotData, errData);
-        var key=getQueryString("id");
+        ref.on("value", gotData, errData);
+        var key = getQueryString("id");
         console.log(key);
 
-        function gotData(data){
+        function gotData(data) {
             // console.log(data.val());
             var competitions = data.val();
             var keys = Object.keys(competitions);
             var geodata = competitions[key].geo_map;
             var attendants = competitions[key].attendants;
-            console.log('Attendants: '+attendants);
+            console.log('Attendants: ' + attendants);
             console.log(typeof geodata);
             var lat = Number(geodata.split(",")[0]);
             var lng = Number(geodata.split(",")[1]);
             //parameters for the map
-            var map;    
+            var map;
             map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: lat, lng: lng}, 
+                center: {
+                    lat: lat,
+                    lng: lng
+                },
                 // center: {lat:-37.817074, lng:145.124479},                
-                zoom: 12,
-                maxZoom:14,
-                minZoom:10
+                zoom: 16,
+                maxZoom: 18,
+                minZoom: 14
             });
             //parameters for the competition area
-            var compCircle = {  
+            var compCircle = {
                 strokeColor: "#f1c40f",
-                strokeOpacity: 0.8,  
-                strokeWeight: 2,  
-                fillColor: "#f1c40f",  
-                fillOpacity: 0.35,  
-                map: map,  
-                center: new google.maps.LatLng(lat, lng),  
-                radius: 8000 // in meters  
-            };  
-            drawCircle = new google.maps.Circle(compCircle);  
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: "#f1c40f",
+                fillOpacity: 0.35,
+                map: map,
+                center: new google.maps.LatLng(lat, lng),
+                radius: 1000 // in meters  
+            };
+            drawCircle = new google.maps.Circle(compCircle);
             //display the markers
             var refGps = firebase.database().ref("Live_GPS");
-                console.log("Access the GPS database");
-                refGps.once("value").then(function(snapshot) {
-                    for(var i=0; i<attendants.length;i++){
-                        var uid=attendants[i];
-                        console.log(snapshot.child(uid));
-                        var latitude = snapshot.child(uid).child('latitude').val(); 
-                        var longitude = snapshot.child(uid).child('longitude').val();
-                        
-                        console.log(latitude+' '+longitude);
-                        
-                        var marker = new google.maps.Marker({  
-                            map: map,  
-                            // position:(111,null)
-                            position: new google.maps.LatLng(Number(latitude),Number(longitude))
-                            });
-                     }})            
+            console.log("Access the GPS database");
+            refGps.once("value").then(function (snapshot) {
+                for (var i = 0; i < attendants.length; i++) {
+                    var uid = attendants[i];
+                    console.log(snapshot.child(uid));
+                    var latitude = snapshot.child(uid).child('latitude').val();
+                    var longitude = snapshot.child(uid).child('longitude').val();
+
+                    console.log(latitude + ' ' + longitude);
+
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        // position:(111,null)
+                        position: new google.maps.LatLng(Number(latitude), Number(longitude))
+                    });
+                }
+            })
         }
-        
-        function errData(err){
+
+        function errData(err) {
             console.log('Error!');
             console.log(err);
         }
 
-        function getQueryString(name){
-        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-        var r = window.location.search.substr(1).match(reg);
-        if(r!=null)return  unescape(r[2]); return null;
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
         }
-
     </script>
-   
-  </body>
+
+</body>
+
 </html>

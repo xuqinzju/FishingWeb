@@ -1,6 +1,6 @@
 var app_fireBase = {};
 
-(function(){
+(function () {
 
     // Initialize Firebase
     var config = {
@@ -11,9 +11,9 @@ var app_fireBase = {};
         storageBucket: "fishingtest-8c959.appspot.com",
         messagingSenderId: "991861165129"
     };
-    
+
     firebase.initializeApp(config);
-    app_fireBase=firebase;
+    app_fireBase = firebase;
     //app_firebase.prototype.setData = function () {
 
 })()
