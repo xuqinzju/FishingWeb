@@ -40,6 +40,8 @@
             var keys = Object.keys(competitions);
             var geodata = competitions[key].geo_map;
             var attendants = competitions[key].attendants;
+            var status = competitions[key].cStatus;
+
             console.log('Attendants: ' + attendants);
             console.log(typeof geodata);
             var lat = Number(geodata.split(",")[0]);
@@ -68,25 +70,25 @@
                 radius: 1000 // in meters  
             };
             drawCircle = new google.maps.Circle(compCircle);
-            //display the markers
+
+            //display the markers in the competition time
+            if(status==1){
             var refGps = firebase.database().ref("Live_GPS");
-            console.log("Access the GPS database");
+            console.log("Access the GPS database");          
             refGps.once("value").then(function (snapshot) {
                 for (var i = 0; i < attendants.length; i++) {
                     var uid = attendants[i];
                     console.log(snapshot.child(uid));
                     var latitude = snapshot.child(uid).child('latitude').val();
                     var longitude = snapshot.child(uid).child('longitude').val();
-
                     console.log(latitude + ' ' + longitude);
-
                     var marker = new google.maps.Marker({
                         map: map,
                         // position:(111,null)
                         position: new google.maps.LatLng(Number(latitude), Number(longitude))
                     });
                 }
-            })
+            })}
         }
 
         function errData(err) {

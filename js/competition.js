@@ -48,58 +48,93 @@ var today = new Date();
         var startT = competitions[key].startTime;
         var stopT = competitions[key].stopTime;
         var winner = competitions[key].winner;
+        var typeNum = competitions[key].compType;
+        var status = competitions[key].cStatus;
+        console.log(typeof status);
+
         //console.log(description+' '+ date+' '+startT +' '+ stopT);
         var title = document.getElementById('title');
-        var head = document.createElement('h1');
-        var ul = document.getElementById('content');
-        title.appendChild(head);
-        //TODO: make current content tab "active"
-        
+        var ul = document.getElementById('content');   
+        var head = document.getElementById('head');
+        var table = document.getElementById('table');
+
         switch (content) {
             case 'detail':
-                //TODO: add an if-else function for upcoming competition
-                //result and winner information shouldn't be shown
                 head.innerHTML = "Competition Detail";
+                var tr = document.createElement('tr'); 
+                tr.innerHTML = "<th scope='row'>" + 'Competition Name' + "</th>" +
+                    "<td>" + name + "</td>";
+                console.log(tr);
+                table.appendChild(tr);
+                var tr = document.createElement('tr'); 
+                tr.innerHTML = "<th scope='row'>" + 'Description' + "</th>" +
+                    "<td>" + description + "</td>";
+                console.log(tr);
+                table.appendChild(tr);
+                var tr = document.createElement('tr'); 
+                tr.innerHTML = "<th scope='row'>" + 'Time' + "</th>" +
+                    "<td>" + date + "</td>";
+                console.log(tr);
+                table.appendChild(tr);
+                var typeClass;
+                switch (typeNum) {
+                    case 0:
+                        typeClass = 'By Single Fish Length';
+                        break;
+                    case 1:
+                        typeClass = 'By Single Fish Width';
+                        break;
+                    case 2:
+                        typeClass = 'By Single Fish Weight';
+                        break;
+                    case 3:
+                        typeClass = 'By Total Fish Weight';
+                        break;
+                    case 4:
+                        typeClass = 'By Fish Species';
+                        break;
+                    case 5:
+                        typeClass = 'By Fish Quantity';
+                        break;
+                }
+                var tr = document.createElement('tr'); 
+                tr.innerHTML = "<th scope='row'>" + 'Competition Type' + "</th>" +
+                    "<td>" + typeClass + "</td>";
+                console.log(tr);
+                table.appendChild(tr);
 
-                var compName = document.createElement('li');
-                compName.className = "list-group-item";
-                compName.innerHTML = 'Competition Name: ' + name;
-                ul.appendChild(compName);
+                var tr = document.createElement('tr'); 
+                tr.innerHTML = "<th scope='row'>" + 'Start Time' + "</th>" +
+                    "<td>" + startT + "</td>";
+                console.log(tr);
+                table.appendChild(tr);
 
-                var compDcp = document.createElement('li');
-                compDcp.className = "list-group-item";
-                compDcp.innerHTML = 'Description: ' + description;
-                ul.appendChild(compDcp);
+                var tr = document.createElement('tr'); 
+                tr.innerHTML = "<th scope='row'>" + 'Stop Time' + "</th>" +
+                    "<td>" + stopT + "</td>";
+                console.log(tr);
+                table.appendChild(tr);
 
-                var compDate = document.createElement('li');
-                compDate.className = "list-group-item";
-                compDate.innerHTML = 'Time: ' + date;
-                ul.appendChild(compDate);
+                var tr = document.createElement('tr'); 
+                tr.innerHTML = "<th scope='row'>" + 'Reward Price' + "</th>" +
+                    "<td>" + reward + "</td>";
+                console.log(tr);
+                table.appendChild(tr);
 
-                var compT1 = document.createElement('li');
-                compT1.className = "list-group-item"
-                compT1.innerHTML = 'Start Time: ' + startT;
-                ul.appendChild(compT1);
+                if (status == '2') {
+                    var tr = document.createElement('tr'); 
+                    tr.innerHTML = "<th scope='row'>" + 'Winner' + "</th>" +
+                        "<td>" + winner + "</td>";
+                    console.log(tr);
+                    table.appendChild(tr);
 
-                var compT2 = document.createElement('li');
-                compT2.className = "list-group-item";
-                compT2.innerHTML = 'Stop Time: ' + stopT;
-                ul.appendChild(compT2);
+                    var tr = document.createElement('tr'); 
+                    tr.innerHTML = "<th scope='row'>" + 'Resulr' + "</th>" +
+                        "<td>" + result + "</td>";
+                    console.log(tr);
+                    table.appendChild(tr);
+                }
 
-                var compReward = document.createElement('li');
-                compReward.className = "list-group-item";
-                compReward.innerHTML = 'Reward Price: ' + reward;
-                ul.appendChild(compReward);
-
-                var compWinner = document.createElement('li');
-                compWinner.className = "list-group-item";
-                compWinner.innerHTML = 'Winner: ' + winner;
-                ul.appendChild(compWinner);
-
-                var compResult = document.createElement('li');
-                compResult.className = "list-group-item";
-                compResult.innerHTML = 'Result: ' + result;
-                ul.appendChild(compResult);
                 break;
 
             case 'attendance':
@@ -112,28 +147,31 @@ var today = new Date();
                         console.log(uid);
                         var name = snapshot.child(uid).child('displayName').val();
                         console.log(name);
-
-                        var li = document.createElement('li');
-                        li.className = "list-group-item"
-                        li.innerHTML = (i + 1) + '. ' + name;
-                        ul.appendChild(li);
+                        // if(document.getElementById(i+uid)==null){
+                        var tr = document.createElement('tr'); 
+                        tr.id = i+uid;                       
+                        tr.innerHTML = "<th scope='row'>" + (i + 1) + "</th>" +
+                                       "<td>" + name + "</td>";
+                        console.log(tr);
+                        table.appendChild(tr);
+                        // }
                     }
                 })
+
                 break;
 
             case 'post':
-                //TODO: add if-else function
-                //posts is not available for upcoming comeptition
+                console.log(status);
                 head.innerHTML = "Competition Posts";
-                var storageRef = firebase.storage().ref('Images/Competitions');
-                console.log("Access the Storage");
-                // var compStorage = storageRef.child(key);
-                // console.log("Access the Comptition's directory");
-                // console.log(compStorage);
-                // for(var i=0; i<attendants.length;i++){
-                //     console.log(compStorage.child(attendants[i]).child(''));
-                // }
-
+                if (status == '0') {
+                    var sentence = document.createElement('h3');
+                    sentence.innerHTML = "The game has not started yet."
+                    var cont = document.getElementById('container');
+                    cont.appendChild(sentence);
+                } else {
+                    var storageRef = firebase.storage().ref('Images/Competitions');
+                    console.log("Access the Storage");
+                }
                 break;
         }
 
@@ -157,8 +195,11 @@ var today = new Date();
 
         postBtn.onclick = function () {
             //console.log('post');
-
-            window.location.replace(address += "&content=post")
+            if (status != '0') {
+                window.location.replace(address += "&content=post")
+            } else {
+                alert("The competition has not started yet!")
+            }
         }
 
         mapBtn.onclick = function () {
@@ -177,11 +218,6 @@ var today = new Date();
         var r = window.location.search.substr(1).match(reg);
         if (r != null) return unescape(r[2]);
         return null;
-    }
-
-    //TODO: function, judge whether it's a upcoming competition
-    function upcomingComp(date1, date2) {
-        return false
     }
 
 

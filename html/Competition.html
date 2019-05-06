@@ -9,6 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
     <script src="../js/fireBase.js"></script>
     <script src = "../js/competition.js"></script>
+    <!-- <meta http-equiv="refresh" content="5"> -->
     <link rel="icon" type="image/icon" href="../image/fishing-icon.ico"> 
 
     <style>
@@ -44,8 +45,16 @@
         </div>
     </nav>
     <div class="container" id='container'>
-        <div class="starter" id='title'></div>
-        <ul class="list-group list-group-flush" id='content'></ul>    
+        <div class="starter" id='title'>
+            <h1 id='head'></h1>
+        </div>
+        
+        <ul class="list-group list-group-flush" id='content'></ul>
+        <table class="table table-hover" align='center'>
+                <tbody id="table">                   
+                </tbody>
+            </table>
+
     </div>
     <div class = "map" id="googleMap"></div>
     
