@@ -35,6 +35,13 @@ var today = new Date();
     content = getQueryString("content");
 
     function gotData(data) {
+        var listings = document.getElementsByClassName('listing');
+        // console.log('class listing: '+ listings.length);
+        for(var i=listings.length-1; i>=0;i--){
+            listings[i].remove();
+            console.log(listings[i]);
+        }
+
         // console.log(data.val());
         var address = 'Competition.html?' + 'id=' + key;
         var competitions = data.val();
@@ -61,17 +68,22 @@ var today = new Date();
         switch (content) {
             case 'detail':
                 head.innerHTML = "Competition Detail";
-                var tr = document.createElement('tr'); 
+                var tr = document.createElement('tr');
+                tr.className='listing';
                 tr.innerHTML = "<th scope='row'>" + 'Competition Name' + "</th>" +
                     "<td>" + name + "</td>";
                 console.log(tr);
                 table.appendChild(tr);
+
                 var tr = document.createElement('tr'); 
+                tr.className='listing';
                 tr.innerHTML = "<th scope='row'>" + 'Description' + "</th>" +
                     "<td>" + description + "</td>";
                 console.log(tr);
                 table.appendChild(tr);
+
                 var tr = document.createElement('tr'); 
+                tr.className='listing';
                 tr.innerHTML = "<th scope='row'>" + 'Time' + "</th>" +
                     "<td>" + date + "</td>";
                 console.log(tr);
@@ -98,24 +110,28 @@ var today = new Date();
                         break;
                 }
                 var tr = document.createElement('tr'); 
+                tr.className='listing';
                 tr.innerHTML = "<th scope='row'>" + 'Competition Type' + "</th>" +
                     "<td>" + typeClass + "</td>";
                 console.log(tr);
                 table.appendChild(tr);
 
                 var tr = document.createElement('tr'); 
-                tr.innerHTML = "<th scope='row'>" + 'Start Time' + "</th>" +
+                tr.className='listing';
+                tr.innerHTML = "<th scope='row' >" + 'Start Time' + "</th>" +
                     "<td>" + startT + "</td>";
                 console.log(tr);
                 table.appendChild(tr);
 
                 var tr = document.createElement('tr'); 
+                tr.className='listing';
                 tr.innerHTML = "<th scope='row'>" + 'Stop Time' + "</th>" +
                     "<td>" + stopT + "</td>";
                 console.log(tr);
                 table.appendChild(tr);
 
                 var tr = document.createElement('tr'); 
+                tr.className='listing';
                 tr.innerHTML = "<th scope='row'>" + 'Reward Price' + "</th>" +
                     "<td>" + reward + "</td>";
                 console.log(tr);
@@ -123,12 +139,14 @@ var today = new Date();
 
                 if (status == '2') {
                     var tr = document.createElement('tr'); 
+                    tr.className='listing';
                     tr.innerHTML = "<th scope='row'>" + 'Winner' + "</th>" +
                         "<td>" + winner + "</td>";
                     console.log(tr);
                     table.appendChild(tr);
 
                     var tr = document.createElement('tr'); 
+                    tr.className='listing';
                     tr.innerHTML = "<th scope='row'>" + 'Resulr' + "</th>" +
                         "<td>" + result + "</td>";
                     console.log(tr);
@@ -149,6 +167,7 @@ var today = new Date();
                         console.log(name);
                         // if(document.getElementById(i+uid)==null){
                         var tr = document.createElement('tr'); 
+                        tr.className='listing';
                         tr.id = i+uid;                       
                         tr.innerHTML = "<th scope='row'>" + (i + 1) + "</th>" +
                                        "<td>" + name + "</td>";

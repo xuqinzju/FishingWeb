@@ -31,6 +31,13 @@ var tablelist = document.getElementById('listtable');
 
     function gotData(data) {
 
+        var listings = document.getElementsByClassName('listing');
+        // console.log('class listing: '+ listings.length);
+        for(var i=listings.length-1; i>=0;i--){
+            listings[i].remove();
+            console.log(listings[i]);
+        }
+
         // console.log(data.val());
         var competitions = data.val();
         console.log(competitions);
@@ -78,32 +85,27 @@ var tablelist = document.getElementById('listtable');
             }
 
             //create a new row
-            if (document.getElementById(i) == null) {
-                var tr = document.createElement('tr');
-                tr.id = i;
-                var th = document.createElement('th');
-                var td = document.createElement('td');
-                var td2 = document.createElement('td');
-                var td3 = document.createElement('td');
-                td2.id = i + 'date';
-                td3.id = i + 'status';
-                td.appendChild(link);
-                th.scope = 'row';
-                th.innerHTML = i;
-                td2.innerHTML = compDate;
-                td3.innerHTML = statusN;
-                tr.appendChild(th);
-                tr.appendChild(td2);
-                tr.appendChild(td);
-                tr.appendChild(td3);
-                listtable.appendChild(tr);
-            } else {
-                //suppose the date or status changed
-                console.log(document.getElementById(i + 'status'));
-                document.getElementById(i + 'status').innerHTML = statusN;
-                document.getElementById(i + 'date').innerHTML = compDate;
-            }
+            var tr = document.createElement('tr');
+            tr.id = i;
+            var th = document.createElement('th');
+            var td = document.createElement('td');
+            var td2 = document.createElement('td');
+            var td3 = document.createElement('td');
+            td2.id = i + 'date';
+            td3.id = i + 'status';
+            td.appendChild(link);
+            th.scope = 'row';
+            th.innerHTML = i;
+            td2.innerHTML = compDate;
+            td3.innerHTML = statusN;
+            tr.appendChild(th);
+            tr.appendChild(td2);
+            tr.appendChild(td);
+            tr.appendChild(td3);
+            tr.className='listing';
+            listtable.appendChild(tr);
             i++;
+            console.log(tr);
         }
     }
 
