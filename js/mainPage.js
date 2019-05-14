@@ -33,6 +33,7 @@ var tablelist = document.getElementById('listtable');
 
         var listings = document.getElementsByClassName('listing');
         // console.log('class listing: '+ listings.length);
+        // avoid windows refilling when data get updated
         for(var i=listings.length-1; i>=0;i--){
             listings[i].remove();
             console.log(listings[i]);

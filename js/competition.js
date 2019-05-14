@@ -3,7 +3,7 @@ var database;
 var key;
 var content;
 var today = new Date();
-
+var arr = [];
 
 (function () {
     firebase.auth().onAuthStateChanged(function (user) {
@@ -37,7 +37,7 @@ var today = new Date();
     function gotData(data) {
         var listings = document.getElementsByClassName('listing');
         // console.log('class listing: '+ listings.length);
-        for(var i=listings.length-1; i>=0;i--){
+        for (var i = listings.length - 1; i >= 0; i--) {
             listings[i].remove();
             console.log(listings[i]);
         }
@@ -45,7 +45,7 @@ var today = new Date();
         // console.log(data.val());
         var address = 'Competition.html?' + 'id=' + key;
         var competitions = data.val();
-        var attendants = competitions[key].attendants;
+        var attendants = arr.concat(competitions[key].attendants);
         var description = competitions[key].cDescription;
         var status = competitions[key].cStatus;
         var name = competitions[key].cname;
@@ -61,7 +61,7 @@ var today = new Date();
 
         //console.log(description+' '+ date+' '+startT +' '+ stopT);
         var title = document.getElementById('title');
-        var ul = document.getElementById('content');   
+        var ul = document.getElementById('content');
         var head = document.getElementById('head');
         var table = document.getElementById('table');
 
@@ -69,21 +69,21 @@ var today = new Date();
             case 'detail':
                 head.innerHTML = "Competition Detail";
                 var tr = document.createElement('tr');
-                tr.className='listing';
+                tr.className = 'listing';
                 tr.innerHTML = "<th scope='row'>" + 'Competition Name' + "</th>" +
                     "<td>" + name + "</td>";
                 console.log(tr);
                 table.appendChild(tr);
 
                 var tr = document.createElement('tr'); 
-                tr.className='listing';
+                tr.className = 'listing';
                 tr.innerHTML = "<th scope='row'>" + 'Description' + "</th>" +
                     "<td>" + description + "</td>";
                 console.log(tr);
                 table.appendChild(tr);
 
                 var tr = document.createElement('tr'); 
-                tr.className='listing';
+                tr.className = 'listing';
                 tr.innerHTML = "<th scope='row'>" + 'Time' + "</th>" +
                     "<td>" + date + "</td>";
                 console.log(tr);
@@ -110,28 +110,28 @@ var today = new Date();
                         break;
                 }
                 var tr = document.createElement('tr'); 
-                tr.className='listing';
+                tr.className = 'listing';
                 tr.innerHTML = "<th scope='row'>" + 'Competition Type' + "</th>" +
                     "<td>" + typeClass + "</td>";
                 console.log(tr);
                 table.appendChild(tr);
 
                 var tr = document.createElement('tr'); 
-                tr.className='listing';
+                tr.className = 'listing';
                 tr.innerHTML = "<th scope='row' >" + 'Start Time' + "</th>" +
                     "<td>" + startT + "</td>";
                 console.log(tr);
                 table.appendChild(tr);
 
                 var tr = document.createElement('tr'); 
-                tr.className='listing';
+                tr.className = 'listing';
                 tr.innerHTML = "<th scope='row'>" + 'Stop Time' + "</th>" +
                     "<td>" + stopT + "</td>";
                 console.log(tr);
                 table.appendChild(tr);
 
                 var tr = document.createElement('tr'); 
-                tr.className='listing';
+                tr.className = 'listing';
                 tr.innerHTML = "<th scope='row'>" + 'Reward Price' + "</th>" +
                     "<td>" + reward + "</td>";
                 console.log(tr);
@@ -139,14 +139,14 @@ var today = new Date();
 
                 if (status == '2') {
                     var tr = document.createElement('tr'); 
-                    tr.className='listing';
+                    tr.className = 'listing';
                     tr.innerHTML = "<th scope='row'>" + 'Winner' + "</th>" +
                         "<td>" + winner + "</td>";
                     console.log(tr);
                     table.appendChild(tr);
 
                     var tr = document.createElement('tr'); 
-                    tr.className='listing';
+                    tr.className = 'listing';
                     tr.innerHTML = "<th scope='row'>" + 'Resulr' + "</th>" +
                         "<td>" + result + "</td>";
                     console.log(tr);
@@ -160,21 +160,41 @@ var today = new Date();
                 var refUser = firebase.database().ref("Users");
                 console.log("Access the user database");
                 refUser.once("value").then(function (snapshot) {
-                    for (var i = 0; i < attendants.length; i++) {
-                        var uid = attendants[i];
-                        console.log(uid);
-                        var name = snapshot.child(uid).child('displayName').val();
-                        console.log(name);
-                        // if(document.getElementById(i+uid)==null){
-                        var tr = document.createElement('tr'); 
-                        tr.className='listing';
-                        tr.id = i+uid;                       
-                        tr.innerHTML = "<th scope='row'>" + (i + 1) + "</th>" +
-                                       "<td>" + name + "</td>";
-                        console.log(tr);
-                        table.appendChild(tr);
-                        // }
+
+                    if (attendants[0] == null) {
+                        // alert('An empty array!');
+                        var text = document.createElement('h2');
+                        text.innerHTML = 'No one has registered yet.';
+                        text.className = 'listing';
+                        text.align = 'center';
+                        text.style.font = "italic 30px arial,serif";
+                        document.getElementById('container').appendChild(text);
+                    } else {
+                        var thead = document.createElement('thead');
+                        thead.className = 'listing';
+                        var tr = document.createElement('tr');
+                        tr.innerHTML = "<th scope='col'>" + '#' + "</th>" +
+                            "<th scope='col'>" + 'User Name' + "</th>";
+                        thead.appendChild(tr);
+                        document.getElementById('maintable').appendChild(thead);
+
+                        for (var i = 0; i < attendants.length; i++) {
+                            var uid = attendants[i];
+                            console.log(uid);
+                            var name = snapshot.child(uid).child('displayName').val();
+                            console.log(name);
+
+                            var tr = document.createElement('tr'); 
+                            tr.className = 'listing';
+                            tr.id = i + uid;
+                            tr.innerHTML = "<th scope='row'>" + (i + 1) + "</th>" +
+                                "<td>" + name + "</td>";
+                            console.log(tr);
+                            table.appendChild(tr);
+
+                        }
                     }
+
                 })
 
                 break;
