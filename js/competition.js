@@ -2,7 +2,6 @@ var mainApp = {};
 var database;
 var key;
 var content;
-var today = new Date();
 var arr = [];
 
 (function () {
@@ -191,7 +190,6 @@ var arr = [];
                                 "<td>" + name + "</td>";
                             console.log(tr);
                             table.appendChild(tr);
-
                         }
                     }
 
@@ -234,11 +232,12 @@ var arr = [];
 
         postBtn.onclick = function () {
             //console.log('post');
-            if (status != '0') {
-                window.location.replace(address += "&content=post")
-            } else {
-                alert("The competition has not started yet!")
-            }
+            // if (status != '0') {
+            //     window.location.assign('Post.html?id=' + key);
+            // } else {
+            //     alert("The competition has not started yet!")
+            // }
+            window.location.replace('Post.html?id=' + key);
         }
 
         mapBtn.onclick = function () {

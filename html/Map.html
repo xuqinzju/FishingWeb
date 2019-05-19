@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Competition Map</title>
     <meta name="viewport" content="initial-scale=1.0">
@@ -46,7 +45,8 @@
             console.log(typeof geodata);
             var lat = Number(geodata.split(",")[0]);
             var lng = Number(geodata.split(",")[1]);
-            //parameters for the map
+
+            //set parameters for the map
             var map;
             map = new google.maps.Map(document.getElementById('map'), {
                 center: {
@@ -58,7 +58,8 @@
                 maxZoom: 18,
                 minZoom: 14
             });
-            //parameters for the competition area
+            
+            //set parameters for the competition area
             var compCircle = {
                 strokeColor: "#f1c40f",
                 strokeOpacity: 0.8,

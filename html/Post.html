@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Competition Post</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <meta name="viewport" content="initial-scale=1.0">
+    <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+    <script src="../js/fireBase.js"></script>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/png" href="../image/picture.png">
+    <style>
+
+        body {
+            /* background-color: #eeeeee; */
+            padding-top: 50px;  
+        }
+
+        .title {
+            padding: 40px 15px;
+            text-align: center;
+        }
+
+
+        .container {
+            width: 1134px;
+            margin: 40px auto;
+            position: relative;
+
+        }
+
+        .container img {
+            padding: 10px 10px 15px;
+            background: white;
+            border: 1px solid #ddd;
+            box-shadow: 2px 2px 3px rgba(50, 50, 50, 0.4);
+        }
+
+        .pic {
+            width: 250px;
+            margin-right: 1%;
+        }
+
+        .container>img:hover {
+            opacity: 0.6;
+        }
+    </style>
+</head>
+
+<body>
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div>
+                    <div class="navbar-header">
+                        <a href="mainPage.html" class="navbar-brand">Competition Page</a>
+                    </div>
+                    <div id="navbar" class="collapse navbar-collapse">
+                        <ul id = 'navbar' class="nav navbar-nav" role='tablist'>
+                            <li id='detail' class='inactive' role='presentation'><a href="#">Detail</a></li>
+                            <li id='attendance' role='presentation'><a href="#">Attendance</a></li>
+                            <li id='post' role='presentation'><a href="#">Post</a></li>
+                            <li id='map' role='presentation'><a href="#">Map</a></li>
+                            <li><a href="#" onclick="mainApp.logOut()">Log out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+    <div class="title">
+        <h1>Competition Post</h1>
+    </div>
+
+    <div class="container" id='container'></div>
+
+
+    <script>
+        var mainApp={};
+        (function () {
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            // User is signed in.
+            uid = user.uid;
+        } else {
+            //redirect to login page
+            uid = null;
+            window.location.replace("login.html")
+        }
+    });
+        var container = document.getElementById('container');
+        var key = getQueryString("id");
+        var database = firebase.database();
+        var ref = database.ref('Posts/Competitions/' + key);
+        console.log("Access the database!");
+        ref.on("value", gotData, errData);
+        function gotData(data) {
+            var listings = document.getElementsByClassName('pic');
+            for (var i = listings.length - 1; i >= 0; i--) {
+                listings[i].remove();
+                console.log(listings[i]);
+            }
+            var posts = data.val();
+            var keys = Object.keys(posts);
+
+            var dic = new Array();
+            for (var i = 0; i < keys.length; i++) {
+                var timestamp = Number(keys[i].split("_")[0]);
+                dic[timestamp] = keys[i];
+            }
+            var sortlist = Object.keys(dic).sort();
+            var refUser = firebase.database().ref("Users");
+            refUser.once("value").then(function (snapshot) {
+                for (var key in sortlist) {
+                    var k = dic[sortlist[key]];            
+                    var uid = posts[k].userId;
+                    var size = posts[k].measuredData;
+                    console.log(posts[k].timeStamp);
+                    var time = getLocalTime(parseInt(posts[k].timeStamp));
+                    console.log('time: '+time);
+                    var img = document.createElement('img');
+                    img.className = 'pic';
+                    img.src = posts[k].oriDownloadUrl;
+                    img.title = 'Fish size: ' + size + '\n' + 'Photo by: ' +
+                        snapshot.child(uid).child('displayName').val() +'\n'+
+                        'Time: '+ time;
+                    container.appendChild(img);
+                }
+            })
+        }
+
+        function errData(err) {
+            console.log('Error!');
+            console.log(err);
+        }
+
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        }
+
+        function getLocalTime(timestamp) {
+            return new Date(timestamp*1000);
+        }
+        function logOut() {
+        firebase.auth().signOut().then(function () {
+            console.log("User sign out!");
+        }, function (error) {
+            console.log("User sign out error!");
+        })
+    }
+    mainApp.logOut = logOut;
+           //set button
+        var detailBtn = document.getElementById('detail');
+        var attBtn = document.getElementById('attendance');
+
+        var mapBtn = document.getElementById('map');  
+
+        detailBtn.onclick = function () {
+            //console.log('detail');
+            //this.className
+            window.location.replace('Competition.html?id='+key+"&content=detail")
+        }
+
+        attBtn.onclick = function () {
+            //console.log('attendance');
+            window.location.replace('Competition.html?id='+key+"&content=attendance")
+        }
+
+        mapBtn.onclick = function () {
+            //console.log('map');
+            window.location.assign('Map.html?id=' + key);
+        }
+    
+
+})()
+    </script>
+
+</body>
+
+</html>
