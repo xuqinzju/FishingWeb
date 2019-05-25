@@ -136,7 +136,7 @@ var arr = [];
                 console.log(tr);
                 table.appendChild(tr);
 
-                if (status == '2') {
+                if (status == '3') {
                     var tr = document.createElement('tr'); 
                     tr.className = 'listing';
                     tr.innerHTML = "<th scope='row'>" + 'Winner' + "</th>" +
@@ -146,7 +146,7 @@ var arr = [];
 
                     var tr = document.createElement('tr'); 
                     tr.className = 'listing';
-                    tr.innerHTML = "<th scope='row'>" + 'Resulr' + "</th>" +
+                    tr.innerHTML = "<th scope='row'>" + 'Result' + "</th>" +
                         "<td>" + result + "</td>";
                     console.log(tr);
                     table.appendChild(tr);
@@ -231,13 +231,13 @@ var arr = [];
         }
 
         postBtn.onclick = function () {
-            //console.log('post');
-            // if (status != '0') {
-            //     window.location.assign('Post.html?id=' + key);
-            // } else {
-            //     alert("The competition has not started yet!")
-            // }
-            window.location.replace('Post.html?id=' + key);
+           
+            if (status != '0') {
+                window.location.assign('Post.html?id=' + key);
+            } else {
+                alert("The competition has not started yet!")
+            }
+            // window.location.replace('Post.html?id=' + key);
         }
 
         mapBtn.onclick = function () {

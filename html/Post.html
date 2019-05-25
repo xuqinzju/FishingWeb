@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <link rel="icon" type="image/png" href="../image/picture.png">
     <style>
-        body {
-            /* background-color: #eeeeee; */
-            padding-top: 50px;
+
+        body {      
+            padding-top: 50px;         
         }
 
         .title {
@@ -20,27 +20,27 @@
             text-align: center;
         }
 
-
-        .container {
+        .container2 {
             width: 1134px;
-            margin: 40px auto;
+            margin: 20px auto;
             position: relative;
 
         }
 
-        .container img {
+        .container2 img {
             padding: 10px 10px 15px;
             background: white;
             border: 1px solid #ddd;
             box-shadow: 2px 2px 3px rgba(50, 50, 50, 0.4);
+            
            
         }
 
         .pic {
             width: 250px;
+            height:168px;
             margin-right: 1%;
-            margin-top: 1%;
-            
+            margin-top: 1%;    
         }
 
         .listing {
@@ -50,67 +50,73 @@
             float: left;
             display: inline;
             position: relative;
-            overflow:auto;
-            
-            
+            overflow:auto;               
+        }
+
+        .listing2 {
+            width: 250px;
+            margin-right: 25px;
+            margin-top: 1%;
+            float: left;
+            display: inline;
+            position: relative;
+            overflow:auto;  
         }
 
         .listing:hover img {
             opacity: 0.6;
+             
             
         }
 
         .listing span {
-            text-align: center;
+            /* text-align: center; */
             display: none;
             position: absolute;
             top: 20px;
-            left: 10px;
+            left: 15px;
             right: 10px;
             white-space: pre-line;
+            font-family:"Comic Sans MS", cursive, sans-serif;
             
         }
 
         .listing:hover span {
             display: initial;
-
         }
+
+        .listing2 p{
+            line-height:20px;
+            margin: 0 10px;
+        }
+        
+
     </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div>
-            <div class="navbar-header">
-                <a href="mainPage.html" class="navbar-brand">Competition Page</a>
-            </div>
-            <div id="navbar" class="collapse navbar-collapse">
-                <ul id='navbar' class="nav navbar-nav" role='tablist'>
-                    <li id='detail' class='inactive' role='presentation'>
-                        <a href="#">Detail</a>
-                    </li>
-                    <li id='attendance' role='presentation'>
-                        <a href="#">Attendance</a>
-                    </li>
-                    <li id='post' role='presentation'>
-                        <a href="#">Post</a>
-                    </li>
-                    <li id='map' role='presentation'>
-                        <a href="#">Map</a>
-                    </li>
-                    <li>
-                        <a href="#" onclick="mainApp.logOut()">Log out</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+                        <a href="mainPage.html" class="navbar-brand">Competition Page</a>
+                    </div>
+                    <div id="navbar" class="collapse navbar-collapse">
+                        <ul id = 'navbar' class="nav navbar-nav" role='tablist'>
+                            <li id='detail' class='inactive' role='presentation'><a href="#">Detail</a></li>
+                            <li id='attendance' role='presentation'><a href="#">Attendance</a></li>
+                            <li id='post' role='presentation'><a href="#">Post</a></li>
+                            <li id='map' role='presentation'><a href="#">Map</a></li>
+                            <li><a href="#" onclick="mainApp.logOut()">Log out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
 
     <div class="title">
         <h1>Competition Post</h1>
     </div>
 
-    <div class="container" id='container'></div>
+    <div class="container2" id='container'></div>
 
 
     <script>
@@ -162,13 +168,12 @@
 
                         var img = document.createElement('img');
                         img.className = 'pic';
-                        img.src = posts[k].oriDownloadUrl;
-                        
-
+                        img.src = posts[k].oriDownloadUrl;    
                         var span = document.createElement('span');
                         var text = '';
                         for (key in comments) {
-                            var content = comments[key].content;
+                            var content = comments[key].content.replace(/[\r\n]/g,",");
+                            // var content = comments[key].content;
                             var poster = snapshot.child(comments[key].userId).child('displayName').val();
                             text += poster + ': ' + content + ' \n';
                             // console.log('content: '+comments[key].content+' poster: '+
@@ -184,8 +189,25 @@
                             'Time: ' + time;
                         div.appendChild(img);
                         div.appendChild(span);
-                        container.appendChild(div);
+                        
+                        //create listing2
+                        var div2 = document.createElement('div');
+                        div2.className='listing2';
+                        div2.appendChild(div);
+                        container.appendChild(div2);
 
+                        //create p
+                        var p = document.createElement('p');
+                        p.innerHTML='Fish size: ' + size;
+                        div2.appendChild(p);
+                        
+                        var p = document.createElement('p');
+                        p.innerHTML='Photo by: ' + snapshot.child(uid).child('displayName').val();
+                        div2.appendChild(p);
+
+                        var p = document.createElement('p');
+                        p.innerHTML = 'Time: ' + time;
+                        div2.appendChild(p);                 
                     }
                 })
             }
@@ -221,18 +243,14 @@
             var mapBtn = document.getElementById('map');  
 
             detailBtn.onclick = function () {
-                //console.log('detail');
-                //this.className
                 window.location.replace('Competition.html?id=' + key + "&content=detail")
             }
 
             attBtn.onclick = function () {
-                //console.log('attendance');
                 window.location.replace('Competition.html?id=' + key + "&content=attendance")
             }
 
             mapBtn.onclick = function () {
-                //console.log('map');
                 window.location.assign('Map.html?id=' + key);
             }
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Competition Map</title>
     <meta name="viewport" content="initial-scale=1.0">
@@ -16,7 +17,7 @@
         html,
         body {
             height: 100%;
-            /* height:80%; */
+            /* height: 80%; */
             margin: 0;
             padding: 0;
         }
@@ -39,9 +40,8 @@
             var keys = Object.keys(competitions);
             var geodata = competitions[key].geo_map;
             var attendants = competitions[key].attendants;
-            var status = competitions[key].cStatus;
 
-            console.log('Attendants: ' + attendants);
+            var status = competitions[key].cStatus;
             console.log(typeof geodata);
             var lat = Number(geodata.split(",")[0]);
             var lng = Number(geodata.split(",")[1]);
@@ -54,11 +54,12 @@
                     lng: lng
                 },
                 // center: {lat:-37.817074, lng:145.124479},                
-                zoom: 16,
-                maxZoom: 18,
-                minZoom: 14
+                zoom: 15,
+                maxZoom: 17,
+                minZoom: 13,
+                scaleControl: true
             });
-            
+
             //set parameters for the competition area
             var compCircle = {
                 strokeColor: "#f1c40f",
@@ -73,23 +74,59 @@
             drawCircle = new google.maps.Circle(compCircle);
 
             //display the markers in the competition time
-            if(status==1){
-            var refGps = firebase.database().ref("Live_GPS");
-            console.log("Access the GPS database");          
-            refGps.once("value").then(function (snapshot) {
-                for (var i = 0; i < attendants.length; i++) {
-                    var uid = attendants[i];
-                    console.log(snapshot.child(uid));
-                    var latitude = snapshot.child(uid).child('latitude').val();
-                    var longitude = snapshot.child(uid).child('longitude').val();
-                    console.log(latitude + ' ' + longitude);
-                    var marker = new google.maps.Marker({
-                        map: map,
-                        // position:(111,null)
-                        position: new google.maps.LatLng(Number(latitude), Number(longitude))
-                    });
-                }
-            })}
+            if (status == 1) {
+                var refDatabase = firebase.database().ref();
+                refDatabase.once("value").then(function (snapshot) {
+                    for (uid in attendants) {
+                        var refUser = snapshot.child('Users');
+                        var refGPS = snapshot.child('Live_GPS');
+                        var refPost = snapshot.child('Posts/Competitions/' + key);
+
+                        var latitude = refGPS.child(attendants[uid]).child('latitude').val();
+                        var longitude = refGPS.child(attendants[uid]).child('longitude').val();
+                        var name = refUser.child(attendants[uid]).child('displayName').val();
+                        console.log('name: ' + name + ' latitude: ' + latitude + ' longitude: ' + longitude);
+
+                        var posts = refPost.val();
+                        console.log('posts: ' + posts);
+                        var url = '#';
+                        if (posts != null) {
+                            var keys = Object.keys(posts);
+                            // console.log('keys: '+keys);
+                            for (var i = keys.length - 1; i >= 0; i--) {
+                                console.log(keys[i].split("_")[1]);
+                                if (keys[i].split("_")[1] ==
+                                    attendants[uid]) {
+                                    url = posts[keys[i]].oriDownloadUrl;
+                                    break;
+                                }
+                            }
+                        }
+                        console.log('url:' + url);
+
+                        var marker = new google.maps.Marker({
+                            map: map,
+                            position: new google.maps.LatLng(Number(latitude), Number(longitude)),
+                        });
+                        attachMessage(marker, url, name);
+                    }
+                })
+            }
+        }
+
+        function attachMessage(marker, url, name) {
+            if (url == '#') {
+                var infowindow = new google.maps.InfoWindow({
+                    content: name
+                });
+            } else {
+                var infowindow = new google.maps.InfoWindow({
+                    content: "<img src=" + url + " width=200px>" + "<br>" + 'Photo by: '+name
+                });
+            }
+            marker.addListener('click', function () {
+                infowindow.open(marker.get('map'), marker);
+            });
         }
 
         function errData(err) {

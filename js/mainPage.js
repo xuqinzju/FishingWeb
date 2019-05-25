@@ -34,21 +34,23 @@ var tablelist = document.getElementById('listtable');
         var listings = document.getElementsByClassName('listing');
         // console.log('class listing: '+ listings.length);
         // avoid windows refilling when data get updated
-        for(var i=listings.length-1; i>=0;i--){
+        for (var i = listings.length - 1; i >= 0; i--) {
             listings[i].remove();
             console.log(listings[i]);
         }
 
         // console.log(data.val());
         var competitions = data.val();
-        console.log(competitions);
+        // console.log(competitions);
         var dic = new Array();
 
         var keys = Object.keys(competitions);
         // console.log(keys);
         for (var i = 0; i < keys.length; i++) {
             var k = keys[i];
-            var timekey = competitions[k].date_translated;
+            // var timekey = competitions[k].date_translated;
+            var timekey = translateDate(competitions[k].date,competitions[k].startTime);
+            console.log('timekey: '+timekey);
             dic[timekey] = k;
         }
         var sortlist = Object.keys(dic).sort();
@@ -60,6 +62,7 @@ var tablelist = document.getElementById('listtable');
             var compName = competitions[k].cname;
             var compDate = competitions[k].date;
             var status = competitions[k].cStatus;
+            var time = competitions[k].startTime;
             // var sequence = competitions[k].date_translated
             console.log(compName, compDate);
             var li = document.createElement('li');
@@ -74,8 +77,11 @@ var tablelist = document.getElementById('listtable');
             // console.log(typeof status);
             var statusN;
             switch (status) {
-                case '2':
+                case '3':
                     statusN = 'Finished';
+                    break;
+                case '2':
+                    statusN = 'Waiting for the result......';
                     break;
                 case '1':
                     statusN = 'In progress';
@@ -99,11 +105,12 @@ var tablelist = document.getElementById('listtable');
             th.innerHTML = i;
             td2.innerHTML = compDate;
             td3.innerHTML = statusN;
+            translateDate(compDate,time);
             tr.appendChild(th);
             tr.appendChild(td2);
             tr.appendChild(td);
             tr.appendChild(td3);
-            tr.className='listing';
+            tr.className = 'listing';
             listtable.appendChild(tr);
             i++;
             console.log(tr);
@@ -113,6 +120,19 @@ var tablelist = document.getElementById('listtable');
     function errData(err) {
         console.log('Error!');
         console.log(err);
+    }
+
+    function translateDate(date,time){
+      var nums1 = date.split('/');
+      var nums2 = time.split(':');
+      var time_trans = new Array(2);   
+      var date_trans = new Array(3);
+      date_trans=nums1[2]+nums1[1]+nums1[0];
+      time_trans = nums2[0]+nums2[1];
+
+      console.log('date translated: '+ Number(date_trans+time_trans));
+      return Number(date_trans+time_trans);
+  
     }
 
 
