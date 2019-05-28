@@ -63,12 +63,11 @@ var tablelist = document.getElementById('listtable');
             var compDate = competitions[k].date;
             var status = competitions[k].cStatus;
             var time = competitions[k].startTime;
-            // var sequence = competitions[k].date_translated
-            console.log(compName, compDate);
+
             var li = document.createElement('li');
             // add id to li tag
             li.id = k;
-            // console.log(li);
+            
             var address = 'Competition.html?' + 'id=' + k + "&content=detail";
             var link = document.createElement('a');
             link.href = address;
