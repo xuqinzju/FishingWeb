@@ -66,6 +66,10 @@ var arr = [];
 
         switch (content) {
             case 'detail':
+            var refUser = firebase.database().ref("Users");
+            console.log("Access the user database");
+            refUser.once("value").then(function (snapshot) {
+                var name = snapshot.child(winner).child('displayName').val();
                 head.innerHTML = "Competition Detail";
                 var tr = document.createElement('tr');
                 tr.className = 'listing';
@@ -140,7 +144,7 @@ var arr = [];
                     var tr = document.createElement('tr'); 
                     tr.className = 'listing';
                     tr.innerHTML = "<th scope='row'>" + 'Winner' + "</th>" +
-                        "<td>" + winner + "</td>";
+                        "<td>" + name + "</td>";
                     console.log(tr);
                     table.appendChild(tr);
 
@@ -151,6 +155,8 @@ var arr = [];
                     console.log(tr);
                     table.appendChild(tr);
                 }
+            })
+ 
 
                 break;
 

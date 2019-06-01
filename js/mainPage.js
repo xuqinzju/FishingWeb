@@ -41,6 +41,7 @@ var tablelist = document.getElementById('listtable');
 
         // console.log(data.val());
         var competitions = data.val();
+        console.log(competitions);
         // console.log(competitions);
         var dic = new Array();
 
@@ -51,7 +52,7 @@ var tablelist = document.getElementById('listtable');
             // var timekey = competitions[k].date_translated;
             var timekey = translateDate(competitions[k].date,competitions[k].startTime);
             console.log('timekey: '+timekey);
-            dic[timekey] = k;
+            dic[timekey*1000+i] = k;
         }
         var sortlist = Object.keys(dic).sort();
         console.log(sortlist);

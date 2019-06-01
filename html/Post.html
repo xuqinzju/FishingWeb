@@ -141,7 +141,7 @@
             ref.on("value", gotData, errData);
 
             function gotData(data) {
-                var listings = document.getElementsByClassName('listing');
+                var listings = document.getElementsByClassName('listing2');
                 for (var i = listings.length - 1; i >= 0; i--) {
                     listings[i].remove();
                     console.log(listings[i]);
@@ -149,7 +149,7 @@
 
                 var posts = data.val();
                 var keys = Object.keys(posts);
-
+                console.log(keys);
                 var dic = new Array();
                 for (var i = 0; i < keys.length; i++) {
                     var timestamp = Number(keys[i].split("_")[0]);
@@ -163,7 +163,10 @@
                         var uid = posts[k].userId;
                         var size = posts[k].measuredData;
                         var comments = posts[k].Comments;
-
+                        var name = posts[k].fishingName;
+                        if (name==null){
+                            name = 'unknown'
+                        }
                         var time = getLocalTime(parseInt(posts[k].timeStamp));
 
                         var img = document.createElement('img');
@@ -181,7 +184,7 @@
                         }
                         console.log(typeof text);
                         span.innerHTML = String(text);
-
+                        
                         var div = document.createElement('div');
                         div.className = 'listing';
                         div.title='Fish size: ' + size + '\n' + 'Photo by: ' +
@@ -199,6 +202,10 @@
                         //create p
                         var p = document.createElement('p');
                         p.innerHTML='Fish size: ' + size;
+                        div2.appendChild(p);
+
+                        var p = document.createElement('p');
+                        p.innerHTML = 'Fish name: '+ name;
                         div2.appendChild(p);
                         
                         var p = document.createElement('p');
