@@ -46,6 +46,7 @@
             console.log(typeof geodata);
             var lat = Number(geodata.split(",")[0]);
             var lng = Number(geodata.split(",")[1]);
+            var rad = Number(geodata.split(',')[2])*1000;
 
             //set parameters for the map
             var map;
@@ -70,7 +71,7 @@
                 fillOpacity: 0.35,
                 map: map,
                 center: new google.maps.LatLng(lat, lng),
-                radius: 1000 // in meters  
+                radius: rad // in meters  
             };
             drawCircle = new google.maps.Circle(compCircle);
 
