@@ -47,7 +47,7 @@ var arr = [];
         var attendants = arr.concat(competitions[key].attendants);
         var description = competitions[key].cDescription;
         var status = competitions[key].cStatus;
-        var name = competitions[key].cname;
+        var compname = competitions[key].cname;
         var date = competitions[key].date;
         var result = competitions[key].results;
         var reward = competitions[key].reward;
@@ -56,7 +56,7 @@ var arr = [];
         var winner = competitions[key].winner;
         var typeNum = competitions[key].compType;
         var status = competitions[key].cStatus;
-        console.log(typeof status);
+        
 
         //console.log(description+' '+ date+' '+startT +' '+ stopT);
         var title = document.getElementById('title');
@@ -74,7 +74,7 @@ var arr = [];
                 var tr = document.createElement('tr');
                 tr.className = 'listing';
                 tr.innerHTML = "<th scope='row'>" + 'Competition Name' + "</th>" +
-                    "<td>" + name + "</td>";
+                    "<td>" + compname + "</td>";
                 console.log(tr);
                 table.appendChild(tr);
 
