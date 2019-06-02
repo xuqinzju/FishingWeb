@@ -2,7 +2,7 @@
 // Initialize the FirebaseUI Widget using Firebase.
 var ui = new firebaseui.auth.AuthUI(firebase.auth());
 var uiConfig = {
-    signInSuccessUrl: 'mainPage.html',
+    signInSuccessUrl: 'index.html',
     signInOptions: [
         firebase.auth.EmailAuthProvider.PROVIDER_ID,
     ],
@@ -13,10 +13,10 @@ var uiConfig = {
        Terms of service url/callback.
      */
 
-    tosUrl: 'mainPage.html',
+    tosUrl: 'index.html',
     // Privacy policy url/callback.
     privacyPolicyUrl: function () {
-        window.location.assign('mainPage.html');
+        window.location.assign('index.html');
     }
 };
 // The start method will wait until the DOM is loaded.
