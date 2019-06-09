@@ -1,3 +1,10 @@
+/*
+ *@project: Fishing competition
+ *@author: Qin Xu
+ *@date: 6/9/2019
+ *@description: post page
+*/
+
 <!DOCTYPE html>
 <html>
 
@@ -102,11 +109,16 @@
                     </div>
                     <div id="navbar" class="collapse navbar-collapse">
                         <ul id = 'navbar' class="nav navbar-nav" role='tablist'>
-                            <li id='detail' class='inactive' role='presentation'><a href="#">Detail</a></li>
-                            <li id='attendance' role='presentation'><a href="#">Attendance</a></li>
-                            <li id='post' role='presentation'><a href="#">Post</a></li>
-                            <li id='map' role='presentation'><a href="#">Map</a></li>
-                            <li><a href="#" onclick="mainApp.logOut()">Log out</a></li>
+                            <li id='detail' class='inactive' 
+                                role='presentation'><a href="#">Detail</a></li>
+                            <li id='attendance' role='presentation'>
+                                <a href="#">Attendance</a></li>
+                            <li id='post' role='presentation'>
+                                <a href="#">Post</a></li>
+                            <li id='map' role='presentation'>
+                                <a href="#">Map</a></li>
+                            <li><a href="#" onclick="mainApp.logOut()">Log out                          
+                            </a></li>
                         </ul>
                     </div>
                 </div>
@@ -120,8 +132,11 @@
 
 
     <script>
+        //initialize variables
         var mainApp = {};
         var arr = [];
+
+        //listen the users' loginstatus
         (function () {
             firebase.auth().onAuthStateChanged(function (user) {
                 if (user) {
@@ -133,33 +148,41 @@
                     window.location.replace("login.html")
                 }
             });
+
             var container = document.getElementById('container');
             var key = getQueryString("id");
+            //initialize the database
             var database = firebase.database();
             var ref = database.ref('Posts/Competitions/' + key);
             console.log("Access the database!");
+            //read data
             ref.on("value", gotData, errData);
 
             function gotData(data) {
-                var listings = document.getElementsByClassName('listing2');
+                //remove the old contents
+                var listings = document.getElementsByClassName('listing2');         
                 for (var i = listings.length - 1; i >= 0; i--) {
                     listings[i].remove();
                     console.log(listings[i]);
                 }
 
+                //get the data
                 var posts = data.val();
-                console.log(posts);
-
                 var keys = Object.keys(posts);        
                 var dic = new Array();
+                
+                //sort the posts by posting time
                 for (var i = 0; i < keys.length; i++) {
                     var timestamp = Number(keys[i].split("_")[0]);
                     dic[timestamp] = keys[i];
                 }
                 var sortlist = Object.keys(dic).sort();
+                
+                //entering the user table and read data
                 var refUser = firebase.database().ref("Users");
                 refUser.once("value").then(function (snapshot) {
                     for (var key in sortlist) {
+                        //get data
                         var k = dic[sortlist[key]];
                         var uid = posts[k].userId;
                         var size = posts[k].measuredData;
@@ -169,50 +192,50 @@
                             name = 'unknown'
                         }
                         var time = getLocalTime(parseInt(posts[k].timeStamp));
-
+                        
+                        //add the picture to the page
                         var img = document.createElement('img');
                         img.className = 'pic';
                         img.src = posts[k].oriDownloadUrl;    
                         var span = document.createElement('span');
                         var text = '';
+
+                        //get the comments and add it to the page
                         for (key in comments) {
                             var content = comments[key].content.replace(/[\r\n]/g,",");
-                            // var content = comments[key].content;
                             var poster = snapshot.child(comments[key].userId).child('displayName').val();
-                            text += poster + ': ' + content + ' \n';
-                            // console.log('content: '+comments[key].content+' poster: '+
-                            //             snapshot.child(comments[key].userId).child('displayName').val());
+                            text += poster + ': ' + content + ' \n';    
                         }
-                        console.log(typeof text);
                         span.innerHTML = String(text);
                         
+                        //add a title to the post
                         var div = document.createElement('div');
                         div.className = 'listing';
                         div.title='Fish size: ' + size + '\n' + 'Photo by: ' +
-                            snapshot.child(uid).child('displayName').val() + '\n' +
-                            'Time: ' + time;
+                            snapshot.child(uid).child('displayName').val() 
+                                + '\n' + 'Time: ' + time;
                         div.appendChild(img);
                         div.appendChild(span);
                         
-                        //create listing2
+                        //create class as listing2
                         var div2 = document.createElement('div');
                         div2.className='listing2';
                         div2.appendChild(div);
                         container.appendChild(div2);
-
-                        //create p
+                        //create p for fish size
                         var p = document.createElement('p');
                         p.innerHTML='Fish size: ' + size;
                         div2.appendChild(p);
-
+                        //create p for fish name
                         var p = document.createElement('p');
                         p.innerHTML = 'Fish name: '+ name;
                         div2.appendChild(p);
-                        
+                        //create p for user's information
                         var p = document.createElement('p');
-                        p.innerHTML='Photo by: ' + snapshot.child(uid).child('displayName').val();
+                        p.innerHTML='Photo by: ' + 
+                            snapshot.child(uid).child('displayName').val();
                         div2.appendChild(p);
-
+                        //create p for posting time
                         var p = document.createElement('p');
                         p.innerHTML = 'Time: ' + time;
                         div2.appendChild(p);                 
@@ -224,18 +247,21 @@
                 console.log('Error!');
                 console.log(err);
             }
-
+        
+            //split a string
             function getQueryString(name) {
                 var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
                 var r = window.location.search.substr(1).match(reg);
                 if (r != null) return unescape(r[2]);
                 return null;
             }
-
+            
+            //get a number represent the timestamp
             function getLocalTime(timestamp) {
                 return new Date(timestamp * 1000);
             }
-
+            
+            //logout function
             function logOut() {
                 firebase.auth().signOut().then(function () {
                     console.log("User sign out!");
@@ -244,25 +270,22 @@
                 })
             }
             mainApp.logOut = logOut;
+
             //set button
             var detailBtn = document.getElementById('detail');
             var attBtn = document.getElementById('attendance');
-
             var mapBtn = document.getElementById('map');  
-
             detailBtn.onclick = function () {
-                window.location.replace('Competition.html?id=' + key + "&content=detail")
+                window.location.replace('Competition.html?id=' + key 
+                    + "&content=detail")
             }
-
             attBtn.onclick = function () {
-                window.location.replace('Competition.html?id=' + key + "&content=attendance")
+                window.location.replace('Competition.html?id=' + key 
+                    + "&content=attendance")
             }
-
             mapBtn.onclick = function () {
                 window.location.assign('Map.html?id=' + key);
             }
-
-
         })()
     </script>
 
